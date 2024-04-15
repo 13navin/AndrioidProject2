@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recruiting_app/post.dart';
+import 'package:recruiting_app/candidate.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -57,14 +58,17 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 ElevatedButton(
                   onPressed: () {
-
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const CandidateScreen()),
+                    );
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(const Color(0xFFB8C1EC)),
                     padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(30, 15, 30, 15)),
                   ),
                   child: const Text(
-                    'View Candidates',
+                    'VIEW CANDIDATES',
                     style: TextStyle(fontSize: 16, color: Color(0xFF232946)),
                   ),
                 ),
@@ -77,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(30, 15, 30, 15)),
                   ),
                   child: const Text(
-                    'View Jobs',
+                    'VIEW JOBS',
                     style: TextStyle(fontSize: 16, color: Color(0xFF232946)),
                   ),
                 ),
@@ -119,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(5),
                           child: Text(
                             postList[index].title,
                             textAlign: TextAlign.center,
@@ -127,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(5),
                           child: Text(
                             postList[index].desc,
                             textAlign: TextAlign.center,
