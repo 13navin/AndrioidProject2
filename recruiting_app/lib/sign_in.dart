@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recruiting_app/sign_up.dart';
+import 'home.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
@@ -23,7 +24,7 @@ class SignInScreen extends StatelessWidget {
               const SizedBox(height: 50),
 
               const SizedBox(
-                width: 360,
+                width: 320,
                 child: TextField(
                   decoration: InputDecoration(
                     hintText: 'Enter Email',
@@ -36,7 +37,7 @@ class SignInScreen extends StatelessWidget {
               const SizedBox(height: 20),
 
               const SizedBox(
-                width: 360,
+                width: 320,
                 child: TextField(
                   obscureText: true,
                   decoration: InputDecoration(
@@ -54,16 +55,21 @@ class SignInScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                      );
+                    },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(const Color(0xFFEEBBC3)),
-                      padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(50, 15, 50, 15)),
+                      padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(20, 15, 20, 15)),
                     ),
                     child: const Text(
                       'Sign In',
                       style: TextStyle(
                         color: Color(0xFF232946),
-                        fontSize: 20,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -80,13 +86,13 @@ class SignInScreen extends StatelessWidget {
                     },
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(const Color(0xFFFFFFFF)),
-                      padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(50, 15, 50, 15)),
+                      padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(20, 15, 20, 15)),
                     ),
                     child: const Text(
                       'Sign Up?',
                       style: TextStyle(
                         color: Color(0xFF232946),
-                        fontSize: 20,
+                        fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
