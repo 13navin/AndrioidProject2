@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:recruiting_app/candidate.dart';
 import 'package:recruiting_app/user.dart';
-import 'home.dart';
+import 'package:recruiting_app/home.dart';
+import 'package:recruiting_app/create_post.dart';
 
 class CandidateDetailScreen extends StatelessWidget {
   const CandidateDetailScreen({super.key, required this.user});
@@ -43,6 +44,19 @@ class CandidateDetailScreen extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const CreatePostScreen()),
+                    );
+                  },
+                  icon: const Icon(Icons.add, size: 30, color: Color(0xFF232946)),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(const Color(0xFFB8C1EC)),
+                    padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(4, 4, 4, 4)),
+                  ),
+                ),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -55,7 +69,7 @@ class CandidateDetailScreen extends StatelessWidget {
                     padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(30, 15, 30, 15)),
                   ),
                   child: const Text(
-                    'VIEW CANDIDATES',
+                    'VIEW USERS',
                     style: TextStyle(fontSize: 16, color: Color(0xFF232946)),
                   ),
                 ),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:recruiting_app/user.dart';
 import 'package:recruiting_app/candidate_detail.dart';
 import 'package:recruiting_app/home.dart';
+import 'package:recruiting_app/job_listing.dart';
+import 'package:recruiting_app/create_post.dart';
 
 class CandidateScreen extends StatefulWidget {
   const CandidateScreen({super.key});
@@ -55,6 +57,19 @@ class _CandidateScreenState extends State<CandidateScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const CreatePostScreen()),
+                    );
+                  },
+                  icon: const Icon(Icons.add, size: 30, color: Color(0xFF232946)),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(const Color(0xFFB8C1EC)),
+                    padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(4, 4, 4, 4)),
+                  ),
+                ),
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -72,7 +87,12 @@ class _CandidateScreenState extends State<CandidateScreen> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const JobScreen()),
+                    );
+                  },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(const Color(0xFFB8C1EC)),
                     padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(30, 15, 30, 15)),

@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:recruiting_app/post.dart';
+import 'package:recruiting_app/job.dart';
+import 'package:recruiting_app/job_detail.dart';
 import 'package:recruiting_app/candidate.dart';
-import 'package:recruiting_app/job_listing.dart';
+import 'package:recruiting_app/home.dart';
 import 'package:recruiting_app/create_post.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class JobScreen extends StatefulWidget {
+  const JobScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<JobScreen> createState() => _JobScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  List<Post> postList = [];
+class _JobScreenState extends State<JobScreen> {
+  List<Job> jobList = [];
 
   @override
   void initState() {
     super.initState();
-    postList.add(Post("User1", "12/12/23", "Title 1", "This is the Description of Post 1"));
-    postList.add(Post("User2", "10/01/24", "Title 2", "This is the Description of Post 2"));
+    jobList.add(Job("User1", "Job Title 1", "12/03/24", "This is the Description of Job 1", "job.jpg"));
+    jobList.add(Job("User2", "Job Title 2", "14/04/24", "This is the Description of Job 2", "job.jpg"));
   }
 
   @override
@@ -35,9 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Padding(
             padding: const EdgeInsets.only(right: 20.0),
             child: ElevatedButton(
-              onPressed: () {
-
-              },
+              onPressed: () {},
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(const Color(0xFFEEBBC3)),
                 padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(30, 15, 30, 15)),
@@ -58,7 +57,6 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-
                 IconButton(
                   onPressed: () {
                     Navigator.push(
@@ -70,6 +68,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(const Color(0xFFB8C1EC)),
                     padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(4, 4, 4, 4)),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HomeScreen()),
+                    );
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(const Color(0xFFB8C1EC)),
+                    padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(30, 15, 30, 15)),
+                  ),
+                  child: const Text(
+                    'VIEW POSTS',
+                    style: TextStyle(fontSize: 16, color: Color(0xFF232946)),
                   ),
                 ),
                 ElevatedButton(
@@ -88,22 +102,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: TextStyle(fontSize: 16, color: Color(0xFF232946)),
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const JobScreen()),
-                    );
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(const Color(0xFFB8C1EC)),
-                    padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(30, 15, 30, 15)),
-                  ),
-                  child: const Text(
-                    'VIEW JOBS',
-                    style: TextStyle(fontSize: 16, color: Color(0xFF232946)),
-                  ),
-                ),
               ],
             ),
           ),
@@ -111,53 +109,61 @@ class _HomeScreenState extends State<HomeScreen> {
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.all(5),
-              itemCount: postList.length,
+              itemCount: jobList.length,
               itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-
-                  child: Container(
-
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF232946),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                postList[index].user,
-                                style: const TextStyle(color: Color(0xFFEEBBC3), fontSize: 18, fontWeight: FontWeight.bold),
+                return GestureDetector( // Wrap the Container with GestureDetector
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => JobDetailScreen(job: jobList[index]), // Pass the selected user to CandidateDetailScreen
+                      ),
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF232946),
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Row(
+                          children: [
+                            Hero(
+                              tag: jobList[index].image,
+                              child: Image(
+                                width: 100,
+                                height: 100,
+                                image: AssetImage(
+                                  "images/${jobList[index].image}",
+                                ),
                               ),
-                              Text(
-                                postList[index].time,
-                                style: const TextStyle(color: Colors.white, fontSize: 14, fontStyle: FontStyle.italic),
-                              ),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(width: 20),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  jobList[index].user,
+                                  style: const TextStyle(color: Color(0xFFEEBBC3), fontSize: 18, fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  jobList[index].title,
+                                  style: const TextStyle(color: Color(0xFFB8C1EC), fontSize: 14, fontWeight: FontWeight.bold),
+                                ),
+                                const SizedBox(height: 10),
+                                Text(
+                                  jobList[index].date,
+                                  style: const TextStyle(color: Color(0xFFFFFFFF), fontSize: 14, fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: Text(
-                            postList[index].title,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(color: Color(0xFFB8C1EC), fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: Text(
-                            postList[index].desc,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(color: Colors.white, fontSize: 16),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 );

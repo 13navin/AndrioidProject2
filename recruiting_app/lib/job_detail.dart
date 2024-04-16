@@ -1,25 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:recruiting_app/post.dart';
-import 'package:recruiting_app/candidate.dart';
 import 'package:recruiting_app/job_listing.dart';
+import 'package:recruiting_app/job.dart';
+import 'package:recruiting_app/candidate.dart';
 import 'package:recruiting_app/create_post.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class JobDetailScreen extends StatelessWidget {
+  const JobDetailScreen({super.key, required this.job});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  List<Post> postList = [];
-
-  @override
-  void initState() {
-    super.initState();
-    postList.add(Post("User1", "12/12/23", "Title 1", "This is the Description of Post 1"));
-    postList.add(Post("User2", "10/01/24", "Title 2", "This is the Description of Post 2"));
-  }
+  final Job job;
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Padding(
             padding: const EdgeInsets.only(right: 20.0),
             child: ElevatedButton(
-              onPressed: () {
-
-              },
+              onPressed: () {},
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(const Color(0xFFEEBBC3)),
                 padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(30, 15, 30, 15)),
@@ -58,7 +44,6 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-
                 IconButton(
                   onPressed: () {
                     Navigator.push(
@@ -88,6 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: TextStyle(fontSize: 16, color: Color(0xFF232946)),
                   ),
                 ),
+
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -106,63 +92,69 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
+
           ),
           const SizedBox(height: 10),
           Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(5),
-              itemCount: postList.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 5),
-
-                  child: Container(
-
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF232946),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
+            child: SingleChildScrollView(
+              physics: const NeverScrollableScrollPhysics(),
+              child: Padding(
+                padding: const EdgeInsets.all(5),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF232946),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        Hero(
+                          tag: job.image,
+                          child: Image(
+                            width: 150,
+                            height: 150,
+                            image: AssetImage(
+                              "images/${job.image}",
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 20),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                postList[index].user,
+                                job.user,
                                 style: const TextStyle(color: Color(0xFFEEBBC3), fontSize: 18, fontWeight: FontWeight.bold),
                               ),
+                              const SizedBox(height: 10),
                               Text(
-                                postList[index].time,
-                                style: const TextStyle(color: Colors.white, fontSize: 14, fontStyle: FontStyle.italic),
+                                job.title,
+                                style: const TextStyle(color: Color(0xFFB8C1EC), fontSize: 14, fontWeight: FontWeight.bold),
                               ),
+                              const SizedBox(height: 10),
+                              Text(
+                                job.date,
+                                style: const TextStyle(color: Color(0xFFFFFFFF), fontSize: 14, fontWeight: FontWeight.bold),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                job.desc,
+                                style: const TextStyle(color: Color(0xFFFFFFFF), fontSize: 12),
+                              ),
+                              const SizedBox(height: 10),
+
                             ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: Text(
-                            postList[index].title,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(color: Color(0xFFB8C1EC), fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(5),
-                          child: Text(
-                            postList[index].desc,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(color: Colors.white, fontSize: 16),
                           ),
                         ),
                       ],
                     ),
                   ),
-                );
-              },
+                ),
+              ),
             ),
+
           ),
         ],
       ),
