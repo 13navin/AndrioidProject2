@@ -1,12 +1,33 @@
+import 'dart:convert';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:recruiting_app/sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  if(kIsWeb){
+    await Firebase.initializeApp(options: FirebaseOptions(apiKey: "AIzaSyCx5w1DveLtOcTIlIDxFSKvZ9N2rJz1WMg", appId: "1:105275191909:web:118a460be263412799cc8c", messagingSenderId:"105275191909", projectId: "1:105275191909:web:118a460be263412799cc8c"));
+  }
+  await Firebase.initializeApp();
+ 
+  await loadUserData();
   runApp(const MyApp());
 }
 
+Future<void> loadUserData() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  List<Map<String, String>> users =
+  (prefs.getStringList('users') ?? []).map((userString) {
+    return Map<String, String>.from(json.decode(userString));
+  }).toList();
+  // Now you have your users list, you can use it as needed
+}
+
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +37,6 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
-
       ),
       home: const MyHomePage(title: 'Recruiting App'),
     );
@@ -24,7 +44,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
 
   final String title;
 
@@ -69,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const SignInScreen()),
+                      MaterialPageRoute(builder: (context) => SignInScreen()),
                     );
                   },
                   style: ButtonStyle(

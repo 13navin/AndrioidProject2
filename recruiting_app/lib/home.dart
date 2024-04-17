@@ -19,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     postList.add(Post("User1", "12/12/23", "Title 1", "This is the Description of Post 1"));
     postList.add(Post("User2", "10/01/24", "Title 2", "This is the Description of Post 2"));
+    postList.add(Post("User2", "10/01/24", "Title 2", "This is the Description of Post 2"));
   }
 
   @override

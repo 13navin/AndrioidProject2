@@ -30,6 +30,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  shared_preferences: ^2.0.0
+  flutter_secure_storage: ^5.0.3
+  firebase_core: ^2.30.0
+  firebase_auth: ^4.19.2
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -58,11 +62,11 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-
   assets:
-  - images/ralogo.png
-  - images/user.jpg
-  - images/job.jpg
+    - images/ralogo.png
+    - images/user.jpg
+    - images/job.jpg
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
