@@ -1,75 +1,40 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:recruiting_app/job.dart';
-import 'package:recruiting_app/job_listing.dart';
-import 'package:recruiting_app/candidate.dart';
 import 'package:recruiting_app/create_post.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class JobDetailScreen extends StatelessWidget {
+class JobDetailScreen extends StatefulWidget {
   const JobDetailScreen({Key? key, required this.job}) : super(key: key);
 
   final Job job;
 
-  void _applyForJob(BuildContext context) async {
-    try {
-      final User? user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        // User is not signed in
-        return;
-      }
-      final String userId = user.uid;
+  @override
+  _JobDetailScreenState createState() => _JobDetailScreenState();
+}
 
-      // Construct application data
-      final Map<String, dynamic> applicationData = {
-        'userId': userId,
-        'jobId': job.id,
-        'timestamp': DateTime.now().toIso8601String(),
-      };
+class _JobDetailScreenState extends State<JobDetailScreen> {
+  bool isApplied = false;
 
-      // File path for the JSON file
-      const String filePath = 'assets/applicationData.json'; // Change this to your JSON file path
-
-      // Append application data to JSON file
-      await appendToJsonFile(filePath, applicationData);
-
-      // Application successfully stored
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Application submitted successfully')),
-      );
-    } catch (e) {
-      // Handle any errors that occur during application submission
-      print('Error submitting application: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error submitting application')),
-      );
-    }
+  @override
+  void initState() {
+    super.initState();
+    // Retrieve the application status when the page is loaded
+    _retrieveApplicationStatus();
   }
 
-  Future<void> appendToJsonFile(String filePath, Map<String, dynamic> data) async {
+  Future<void> _retrieveApplicationStatus() async {
     try {
-      final File file = File(filePath);
-      List<dynamic> existingData = [];
-
-      // Check if the file exists
-      if (await file.exists()) {
-        // Read existing data from file
-        existingData = jsonDecode(await file.readAsString());
-      }
-
-      // Append new data to existing data
-      existingData.add(data);
-
-      // Write data back to file
-      await file.writeAsString(jsonEncode(existingData));
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      setState(() {
+        // Set the application status from the stored value
+        isApplied = prefs.getBool('isApplied_${widget.job.id}') ?? false;
+      });
     } catch (e) {
-      // Propagate the error
-      throw Exception('Error appending to JSON file: $e');
+      print('Error retrieving application status: $e');
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -121,10 +86,7 @@ class JobDetailScreen extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const CandidateScreen()),
-                    );
+                    // Navigate to CandidateScreen
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(const Color(0xFFB8C1EC)),
@@ -137,10 +99,7 @@ class JobDetailScreen extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const JobScreen()),
-                    );
+                    // Navigate to JobScreen
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(const Color(0xFFB8C1EC)),
@@ -169,12 +128,12 @@ class JobDetailScreen extends StatelessWidget {
                     child: Row(
                       children: [
                         Hero(
-                          tag: job.image,
+                          tag: widget.job.image,
                           child: Image(
                             width: 150,
                             height: 150,
                             image: AssetImage(
-                              "images/${job.image}",
+                              "images/${widget.job.image}",
                             ),
                           ),
                         ),
@@ -184,28 +143,28 @@ class JobDetailScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                job.user,
+                                widget.job.user,
                                 style: const TextStyle(color: Color(0xFFEEBBC3), fontSize: 18, fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                job.title,
+                                widget.job.title,
                                 style: const TextStyle(color: Color(0xFFB8C1EC), fontSize: 14, fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                job.date,
+                                widget.job.date,
                                 style: const TextStyle(color: Color(0xFFFFFFFF), fontSize: 14, fontWeight: FontWeight.bold),
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                job.description,
+                                widget.job.description,
                                 style: const TextStyle(color: Color(0xFFFFFFFF), fontSize: 12),
                               ),
                               const SizedBox(height: 10),
                               ElevatedButton(
                                 onPressed: () => _applyForJob(context),
-                                child: const Text('Apply'),
+                                child: Text(isApplied ? 'Applied' : 'Apply'),
                               ),
                             ],
                           ),
@@ -220,5 +179,46 @@ class JobDetailScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _applyForJob(BuildContext context) async {
+    try {
+      final User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        // User is not signed in
+        return;
+      }
+      final String userId = user.uid;
+
+      // Construct application data
+      final Map<String, dynamic> applicationData = {
+        'userId': userId,
+        'jobId': widget.job.id,
+        'timestamp': DateTime.now().toIso8601String(),
+      };
+
+      // Save application data to shared preferences
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      List<String> existingData = prefs.getStringList('applications') ?? [];
+      existingData.add(jsonEncode(applicationData));
+      await prefs.setStringList('applications', existingData);
+
+      // Update application status and store it
+      setState(() {
+        isApplied = true;
+      });
+      await prefs.setBool('isApplied_${widget.job.id}', true);
+
+      // Application successfully stored
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Application submitted successfully')),
+      );
+    } catch (e) {
+      // Handle any errors that occur during application submission
+      print('Error submitting application: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error submitting application')),
+      );
+    }
   }
 }
