@@ -1,13 +1,15 @@
+
 import 'package:flutter/material.dart';
 import 'package:recruiting_app/candidate.dart';
 import 'package:recruiting_app/user.dart';
 import 'package:recruiting_app/home.dart';
 import 'package:recruiting_app/create_post.dart';
 
+
 class CandidateDetailScreen extends StatelessWidget {
   const CandidateDetailScreen({super.key, required this.user});
 
-  final User user;
+  final UserDetails user;
 
   @override
   Widget build(BuildContext context) {
@@ -180,4 +182,5 @@ class CandidateDetailScreen extends StatelessWidget {
       ),
     );
   }
+
 }

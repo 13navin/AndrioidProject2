@@ -1,4 +1,4 @@
-class User
+class UserDetails
 {
   String user;
   String position;
@@ -8,5 +8,5 @@ class User
   String phone;
   String photo;
 
-  User(this.user, this.position, this.company, this.userdesc, this.email, this.phone, this.photo );
+  UserDetails(this.user, this.position, this.company, this.userdesc, this.email, this.phone, this.photo );
 }

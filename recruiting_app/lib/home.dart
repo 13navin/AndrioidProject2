@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:recruiting_app/post.dart';
 import 'package:recruiting_app/candidate.dart';
 import 'package:recruiting_app/job_listing.dart';
 import 'package:recruiting_app/create_post.dart';
+import 'package:recruiting_app/sign_in.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -36,9 +38,9 @@ class _HomeScreenState extends State<HomeScreen> {
           Padding(
             padding: const EdgeInsets.only(right: 20.0),
             child: ElevatedButton(
-              onPressed: () {
+            onPressed: () => _logout(),
 
-              },
+
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(const Color(0xFFEEBBC3)),
                 padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(30, 15, 30, 15)),
@@ -168,5 +170,17 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+  void _logout() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      // Navigate to login screen or any other screen after logout
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => SignInScreen()),
+      );
+    } catch (e) {
+      print('Error logging out: $e');
+    }
   }
 }

@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:recruiting_app/job.dart';
 import 'package:recruiting_app/job_detail.dart';
 import 'package:recruiting_app/candidate.dart';
 import 'package:recruiting_app/home.dart';
+import 'package:recruiting_app/sign_in.dart';
 import 'package:recruiting_app/create_post.dart';
 
 class JobScreen extends StatefulWidget {
@@ -34,12 +36,12 @@ class _JobScreenState extends State<JobScreen> {
     });
   }
 
-  Future<void> _saveJobData() async {
-    List<Map<String, dynamic>> jsonList = jobList.map((job) => job.toJson()).toList();
-    String jsonData = jsonEncode(jsonList);
-    final file = File('assets/job.json');
-    await file.writeAsString(jsonData);
-  }
+  // Future<void> _saveJobData() async {
+  //   List<Map<String, dynamic>> jsonList = jobList.map((job) => job.toJson()).toList();
+  //   String jsonData = jsonEncode(jsonList);
+  //   final file = File('assets/job.json');
+  //   await file.writeAsString(jsonData);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +57,7 @@ class _JobScreenState extends State<JobScreen> {
           Padding(
             padding: const EdgeInsets.only(right: 20.0),
             child: ElevatedButton(
-              onPressed: () {},
+                onPressed: () => _logout(),
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(const Color(0xFFEEBBC3)),
                 padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(30, 15, 30, 15)),
@@ -192,5 +194,17 @@ class _JobScreenState extends State<JobScreen> {
         ],
       ),
     );
+  }
+  void _logout() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      // Navigate to login screen or any other screen after logout
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => SignInScreen()),
+      );
+    } catch (e) {
+      print('Error logging out: $e');
+    }
   }
 }
