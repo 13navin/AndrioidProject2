@@ -68,5 +68,4 @@ flutter {
 }
 
 dependencies {
-    classpath"com.google.gms.google-services4.4.1"
 }
