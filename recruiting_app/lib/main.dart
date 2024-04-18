@@ -9,22 +9,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   if(kIsWeb){
-    await Firebase.initializeApp(options: FirebaseOptions(apiKey: "AIzaSyCx5w1DveLtOcTIlIDxFSKvZ9N2rJz1WMg", appId: "1:105275191909:web:118a460be263412799cc8c", messagingSenderId:"105275191909", projectId: "1:105275191909:web:118a460be263412799cc8c"));
+    await Firebase.initializeApp(options: const FirebaseOptions(apiKey: "AIzaSyCx5w1DveLtOcTIlIDxFSKvZ9N2rJz1WMg", appId: "1:105275191909:web:118a460be263412799cc8c", messagingSenderId:"105275191909", projectId: "1:105275191909:web:118a460be263412799cc8c"));
   }
   await Firebase.initializeApp();
  
-  await loadUserData();
+
   runApp(const MyApp());
 }
 
-Future<void> loadUserData() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  List<Map<String, String>> users =
-  (prefs.getStringList('users') ?? []).map((userString) {
-    return Map<String, String>.from(json.decode(userString));
-  }).toList();
-  // Now you have your users list, you can use it as needed
-}
+
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

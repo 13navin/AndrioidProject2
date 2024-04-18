@@ -1,4 +1,7 @@
+import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:recruiting_app/job.dart';
 import 'package:recruiting_app/job_detail.dart';
 import 'package:recruiting_app/candidate.dart';
@@ -6,7 +9,7 @@ import 'package:recruiting_app/home.dart';
 import 'package:recruiting_app/create_post.dart';
 
 class JobScreen extends StatefulWidget {
-  const JobScreen({super.key});
+  const JobScreen({Key? key}) : super(key: key);
 
   @override
   State<JobScreen> createState() => _JobScreenState();
@@ -18,8 +21,24 @@ class _JobScreenState extends State<JobScreen> {
   @override
   void initState() {
     super.initState();
-    jobList.add(Job("User1", "Job Title 1", "12/03/24", "This is the Description of Job 1", "job.jpg"));
-    jobList.add(Job("User2", "Job Title 2", "14/04/24", "This is the Description of Job 2", "job.jpg"));
+    _loadJobData();
+  }
+
+  Future<void> _loadJobData() async {
+    String jsonData = await rootBundle.loadString('assets/job.json');
+    List<dynamic> jsonList = jsonDecode(jsonData);
+    List<Job> loadedJobs = jsonList.map((json) => Job.fromJson(json)).toList();
+
+    setState(() {
+      jobList = loadedJobs;
+    });
+  }
+
+  Future<void> _saveJobData() async {
+    List<Map<String, dynamic>> jsonList = jobList.map((job) => job.toJson()).toList();
+    String jsonData = jsonEncode(jsonList);
+    final file = File('assets/job.json');
+    await file.writeAsString(jsonData);
   }
 
   @override
@@ -111,12 +130,12 @@ class _JobScreenState extends State<JobScreen> {
               padding: const EdgeInsets.all(5),
               itemCount: jobList.length,
               itemBuilder: (context, index) {
-                return GestureDetector( // Wrap the Container with GestureDetector
+                return GestureDetector(
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => JobDetailScreen(job: jobList[index]), // Pass the selected user to CandidateDetailScreen
+                        builder: (context) => JobDetailScreen(job: jobList[index]),
                       ),
                     );
                   },

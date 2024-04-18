@@ -1,13 +1,75 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:recruiting_app/job_listing.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:recruiting_app/job.dart';
+import 'package:recruiting_app/job_listing.dart';
 import 'package:recruiting_app/candidate.dart';
 import 'package:recruiting_app/create_post.dart';
 
 class JobDetailScreen extends StatelessWidget {
-  const JobDetailScreen({super.key, required this.job});
+  const JobDetailScreen({Key? key, required this.job}) : super(key: key);
 
   final Job job;
+
+  void _applyForJob(BuildContext context) async {
+    try {
+      final User? user = FirebaseAuth.instance.currentUser;
+      if (user == null) {
+        // User is not signed in
+        return;
+      }
+      final String userId = user.uid;
+
+      // Construct application data
+      final Map<String, dynamic> applicationData = {
+        'userId': userId,
+        'jobId': job.id,
+        'timestamp': DateTime.now().toIso8601String(),
+      };
+
+      // File path for the JSON file
+      const String filePath = 'assets/applicationData.json'; // Change this to your JSON file path
+
+      // Append application data to JSON file
+      await appendToJsonFile(filePath, applicationData);
+
+      // Application successfully stored
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Application submitted successfully')),
+      );
+    } catch (e) {
+      // Handle any errors that occur during application submission
+      print('Error submitting application: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error submitting application')),
+      );
+    }
+  }
+
+  Future<void> appendToJsonFile(String filePath, Map<String, dynamic> data) async {
+    try {
+      final File file = File(filePath);
+      List<dynamic> existingData = [];
+
+      // Check if the file exists
+      if (await file.exists()) {
+        // Read existing data from file
+        existingData = jsonDecode(await file.readAsString());
+      }
+
+      // Append new data to existing data
+      existingData.add(data);
+
+      // Write data back to file
+      await file.writeAsString(jsonEncode(existingData));
+    } catch (e) {
+      // Propagate the error
+      throw Exception('Error appending to JSON file: $e');
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +135,6 @@ class JobDetailScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 16, color: Color(0xFF232946)),
                   ),
                 ),
-
                 ElevatedButton(
                   onPressed: () {
                     Navigator.push(
@@ -92,12 +153,10 @@ class JobDetailScreen extends StatelessWidget {
                 ),
               ],
             ),
-
           ),
           const SizedBox(height: 10),
           Expanded(
             child: SingleChildScrollView(
-              physics: const NeverScrollableScrollPhysics(),
               child: Padding(
                 padding: const EdgeInsets.all(5),
                 child: Container(
@@ -140,11 +199,14 @@ class JobDetailScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                job.desc,
+                                job.description,
                                 style: const TextStyle(color: Color(0xFFFFFFFF), fontSize: 12),
                               ),
                               const SizedBox(height: 10),
-
+                              ElevatedButton(
+                                onPressed: () => _applyForJob(context),
+                                child: const Text('Apply'),
+                              ),
                             ],
                           ),
                         ),
@@ -154,7 +216,6 @@ class JobDetailScreen extends StatelessWidget {
                 ),
               ),
             ),
-
           ),
         ],
       ),

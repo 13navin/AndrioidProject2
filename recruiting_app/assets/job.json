@@ -1,0 +1,18 @@
+[
+  {
+    "id" : 1,
+    "user": "Afee",
+    "title": "Data Analyst",
+    "date": "12/03/24",
+    "description": "This is the Description of Data Analyst",
+    "image": "job.jpg"
+  },
+  {
+    "id": 2,
+    "user": "User2",
+    "title": "Job Title 2",
+    "date": "14/04/24",
+    "description": "This is the Description of Job 2",
+    "image": "job.jpg"
+  }
+]
