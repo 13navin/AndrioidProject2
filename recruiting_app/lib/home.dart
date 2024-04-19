@@ -2,9 +2,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:recruiting_app/job_listing.dart';
 import 'package:recruiting_app/sign_in.dart';
 import 'package:recruiting_app/post.dart';
-
+import 'package:recruiting_app/create_post.dart';
+import 'package:recruiting_app/candidate.dart';
+import 'package:recruiting_app/job_listing.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -66,7 +69,60 @@ class _HomeScreenState extends State<HomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(height: 20),
-          // Your buttons row here
+          SizedBox(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const CreatePostScreen()),
+                    );
+                  },
+                  icon: const Icon(Icons.add, size: 30, color: Color(0xFF232946)),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(const Color(0xFFB8C1EC)),
+                    padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(4, 4, 4, 4)),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const CandidateScreen()),
+                    );
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(const Color(0xFFB8C1EC)),
+                    padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(30, 15, 30, 15)),
+                  ),
+                  child: const Text(
+                    'VIEW USERS',
+                    style: TextStyle(fontSize: 16, color: Color(0xFF232946)),
+                  ),
+                ),
+
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const JobScreen()),
+                    );
+                  },
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(const Color(0xFFB8C1EC)),
+                    padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(30, 15, 30, 15)),
+                  ),
+                  child: const Text(
+                    'VIEW JOBS',
+                    style: TextStyle(fontSize: 16, color: Color(0xFF232946)),
+                  ),
+                ),
+              ],
+            ),
+
+          ),
           const SizedBox(height: 10),
           Expanded(
             child: ListView.builder(
