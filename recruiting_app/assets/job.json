@@ -9,10 +9,26 @@
   },
   {
     "id": 2,
-    "user": "User2",
-    "title": "Job Title 2",
+    "user": "Navin",
+    "title": "IT Support",
     "date": "14/04/24",
-    "description": "This is the Description of Job 2",
+    "description": "This is the Description of IT Support",
+    "image": "job.jpg"
+  },
+  {
+    "id": 3,
+    "user": "Priyanshu",
+    "title": "Fullstack Developer",
+    "date": "27/02/24",
+    "description": "This is the Description of Fullstack Developer",
+    "image": "job.jpg"
+  },
+  {
+    "id": 4,
+    "user": "Vanamuthu",
+    "title": "Tester",
+    "date": "14/04/24",
+    "description": "This is the Description of Tester",
     "image": "job.jpg"
   }
 ]
