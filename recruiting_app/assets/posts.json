@@ -1,0 +1,26 @@
+[
+  {
+    "user": "Afee",
+    "time": "12/12/23",
+    "title": "Afee Post",
+    "desc": "Afee Post Description"
+  },
+  {
+    "user": "Navin",
+    "time": "10/01/24",
+    "title": "navins post",
+    "desc": "Navin post desc"
+  },
+  {
+    "user": "Priyanshu",
+    "time": "05/05/25",
+    "title": "Priyanshu Post",
+    "desc": "Priyanshu post"
+  },
+  {
+  "user": "Vanamuthu",
+  "time": "05/05/25",
+  "title": "Vanamuthu Post",
+  "desc": "Priyanshu desc"
+}
+]

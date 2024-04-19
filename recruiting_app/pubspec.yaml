@@ -69,6 +69,7 @@ flutter:
     - images/job.jpg
     - assets/job.json
     - assets/applicationData.json
+    - assets/posts.json
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
