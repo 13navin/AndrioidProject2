@@ -1,0 +1,20 @@
+[
+  {
+    "user": "User1",
+    "position": "Position 1",
+    "company": "Company 1",
+    "userdesc": "This is the Description of User 1",
+    "email": "email1@gmail.com",
+    "phone": "1111111111",
+    "photo": "user.jpg"
+  },
+  {
+    "user": "User2",
+    "position": "Position 2",
+    "company": "Company 2",
+    "userdesc": "This is the Description of User 2",
+    "email": "email2@gmail.com",
+    "phone": "2222222222",
+    "photo": "user.jpg"
+  }
+]

@@ -1,15 +1,17 @@
+import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:recruiting_app/user.dart';
-import 'package:recruiting_app/candidate_detail.dart';
-import 'package:recruiting_app/home.dart';
 import 'package:recruiting_app/job_listing.dart';
 import 'package:recruiting_app/create_post.dart';
+import 'package:recruiting_app/home.dart';
+import 'package:recruiting_app/candidate_detail.dart';
 import 'package:recruiting_app/sign_in.dart';
 
 
 class CandidateScreen extends StatefulWidget {
-  const CandidateScreen({super.key});
+  const CandidateScreen({Key? key}) : super(key: key);
 
   @override
   State<CandidateScreen> createState() => _CandidateScreenState();
@@ -21,8 +23,21 @@ class _CandidateScreenState extends State<CandidateScreen> {
   @override
   void initState() {
     super.initState();
-    userList.add(UserDetails("User1", "Position 1", "Company 1", "This is the Description of User 1","email1@gmail.com", "1111111111", "user.jpg"));
-    userList.add(UserDetails("User2", "Position 2", "Company 2", "This is the Description of User 2","email2@gmail.com", "2222222222", "user.jpg"));
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    try {
+      String jsonData = await rootBundle.loadString('assets/candidate.json');
+      List<dynamic> jsonList = jsonDecode(jsonData);
+      List<UserDetails> loadedUsers = jsonList.map((json) => UserDetails.fromJson(json)).toList();
+
+      setState(() {
+        userList = loadedUsers;
+      });
+    } catch (e) {
+      print('Error loading user data: $e');
+    }
   }
 
   @override
@@ -39,7 +54,7 @@ class _CandidateScreenState extends State<CandidateScreen> {
           Padding(
             padding: const EdgeInsets.only(right: 20.0),
             child: ElevatedButton(
-              onPressed: () => _logout(),
+              onPressed: _logout,
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(const Color(0xFFEEBBC3)),
                 padding: MaterialStateProperty.all(const EdgeInsets.fromLTRB(30, 15, 30, 15)),
@@ -114,12 +129,12 @@ class _CandidateScreenState extends State<CandidateScreen> {
               padding: const EdgeInsets.all(5),
               itemCount: userList.length,
               itemBuilder: (context, index) {
-                return GestureDetector( // Wrap the Container with GestureDetector
+                return GestureDetector(
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CandidateDetailScreen(user: userList[index]), // Pass the selected user to CandidateDetailScreen
+                        builder: (context) => CandidateDetailScreen(user: userList[index]),
                       ),
                     );
                   },
@@ -177,11 +192,11 @@ class _CandidateScreenState extends State<CandidateScreen> {
       ),
     );
   }
+
   void _logout() async {
     try {
       await FirebaseAuth.instance.signOut();
-      // Navigate to login screen or any other screen after logout
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => SignInScreen()),
       );
